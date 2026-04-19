@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Электрик PRO | 3D Приложение</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Firebase SDK -->
+    <script type="module" src="app.js"></script>
+</head>
+<body>
+    <div id="3d-container"></div>
+    <div class="ui-overlay">
+        <header>
+            <h1 id="welcome-title">⚡ Электрик Ахмед ⚡</h1>
+            <div class="auth-buttons">
+                <button id="guest-login">👤 Войти как гость</button>
+                <button id="admin-login">🔧 Админ вход</button>
+            </div>
+        </header>
+
+        <main>
+            <section class="contact-info">
+                <h2>📞 Контакты</h2>
+                <p id="contact-phone">+7(963) 797-13-86</p>
+                <p id="contact-email">munkivugev@gmail.com</p>
+                <p id="contact-name">Ахмед</p>
+                <p id="contact-region">Республика Дагестан: Буйнакск, Махачкала, Каспийск</p>
+            </section>
+
+            <section class="forum-section">
+                <h2>💬 Форум электриков</h2>
+                <div id="forum-messages" class="forum-list"></div>
+                <textarea id="forum-input" placeholder="Ваше сообщение..." rows="2"></textarea>
+                <button id="send-message">Отправить</button>
+                <p class="forum-note">* Гости и админ могут писать. Админ может удалять.</p>
+            </section>
+        </main>
+
+        <footer>
+            <p>© 2025 Электрик Ахмед – оперативный выезд по Дагестану</p>
+        </footer>
+    </div>
+
+    <!-- Модалка входа админа -->
+    <div id="admin-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Вход администратора</h3>
+            <input type="password" id="admin-password" placeholder="Пароль">
+            <button id="submit-admin">Войти</button>
+            <p class="hint">Используйте пароль: 111</p>
+        </div>
+    </div>
+
+    <!-- Панель редактирования (только для админа) -->
+    <div id="edit-panel" class="edit-panel hidden">
+        <h3>✏️ Панель редактирования (Админ)</h3>
+        <label>Приветствие:</label>
+        <input type="text" id="edit-welcome" value="⚡ Электрик Ахмед ⚡">
+        <label>Телефон:</label>
+        <input type="text" id="edit-phone" value="+7(963) 797-13-86">
+        <label>Email:</label>
+        <input type="email" id="edit-email" value="munkivugev@gmail.com">
+        <label>Имя:</label>
+        <input type="text" id="edit-name" value="Ахмед">
+        <label>Регион (города):</label>
+        <input type="text" id="edit-region" value="Республика Дагестан: Буйнакск, Махачкала, Каспийск">
+        <button id="save-settings">💾 Сохранить настройки</button>
+        <button id="close-edit-panel">Закрыть</button>
+    </div>
+</body>
+</html>
