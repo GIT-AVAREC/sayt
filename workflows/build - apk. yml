@@ -1,0 +1,67 @@
+name: Build Capacitor APK
+
+on:
+  push:
+    branches: [ main, master ]
+    tags:
+      - 'v*'             # запуск при создании тега вида v1.0.0
+  workflow_dispatch:     # возможность запуска вручную из интерфейса GitHub
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Capacitor CLI
+        run: npm install -g @capacitor/cli
+
+      - name: Install project dependencies
+        run: npm install @capacitor/android @capacitor/ios
+
+      - name: Initialize Capacitor (if not already done)
+        run: npx cap init MyApp com.electric.app --web-dir .
+
+      - name: Add Android platform
+        run: npx cap add android
+
+      - name: Sync web assets to Android
+        run: npx cap sync android
+
+      - name: Build APK (Debug)
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: electric-app-debug
+          path: android/app/build/outputs/apk/debug/*.apk
+
+      - name: (Optional) Upload to release on tag
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: android/app/build/outputs/apk/debug/*.apk
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: "Автоматическая сборка APK"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
